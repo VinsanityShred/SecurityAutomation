@@ -39,12 +39,15 @@ Cypress.Commands.add('login',(email,password) =>{
 })
 
 Cypress.Commands.add('logout',() => {
-    cy.get(':nth-child(8) > a').click()
-    cy.get('.menu-vertical > :nth-child(5) > a')
+    cy.get('.menu-horizontal > :nth-child(8)').click()
+    cy.get('.btn').click()
+    cy.get('.menu-vertical > :nth-child(5) > a').click()
+    cy.wait(5000)
+
 })
 
 Cypress.Commands.add('visit_vshred_test_env',() => {
-    cy.visit('https://testing-06.vshred.com')
+    cy.visit('https://testing-07.vshred.com')
     cy.clearCookies()
 })
 
@@ -52,8 +55,10 @@ Cypress.Commands.add('create_user_as_super_admin', (CAUser) =>
     {   
         cy.visit_vshred_test_env()
         cy.login('super@example.com','asdfasdf')
+        //cy.login('maryann.c@vshred.com','VshredPass@2')
         cy.get(':nth-child(14) > .nav-link').click()
         cy.get('.btn > span').click()
+        cy.wait(5000)
         cy.get('div > #user-name').type(CAUser)
         cy.get('div > #user-email').type(CAUser+'@catest.com')
         cy.get('div > #user-password').type('pass1234')

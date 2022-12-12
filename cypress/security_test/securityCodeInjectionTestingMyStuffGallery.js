@@ -21,7 +21,7 @@ describe('Code Injection Test', ()=>{
         cy.get('.toast-message').invoke("text").should("eq","Profile updated")
 
 
-        //cy.logout()
+        cy.logout()
     })
 
     it.skip('profile Page Code Injection not allowed', () => 
@@ -45,6 +45,7 @@ describe('Code Injection Test', ()=>{
         const scriptImagePath = '<script>alert(\'test\')<:script>.png';
         cy.visit_vshred_test_env()
         cy.login('mc_member@test.com','pass1234')
+        //cy.login('maryann.c@vshred.com','VshredPass@2')
         cy.get('.btn').click()
         cy.get('.menu-vertical > :nth-child(4) > a').click()
         cy.get('.btn__text').click()
@@ -53,10 +54,10 @@ describe('Code Injection Test', ()=>{
         
         //cy.get('#images').a
         //(scriptImagePath)
-        //cy.logout()
+        cy.logout()
     })
 
-    it.skip('My Stuff Gallery Image Upload Code Injection not allowed', () => 
+    it.only('My Stuff Gallery Image Upload Code Injection not allowed', () => 
     {
         const scriptImagePath = '<script>alert(\'test\')<:script>.png';
         const dayjs = require('dayjs')
@@ -64,9 +65,12 @@ describe('Code Injection Test', ()=>{
         const CAUser = 'CA_SuperAdmin_'+dayjs().format('DDMMYYYY')+Timenow24hoursa;
         cy.create_user_as_super_admin(CAUser)
         cy.login(CAUser+'@catest.com','pass1234')
+        cy.wait(5000)
+        cy.get('.modal-active').click(-50, -50, { force: true });
         cy.get('.menu-vertical > :nth-child(4) > a').click()
-        cy.get('.btn__text').click()
+        cy.get(':nth-child(1) > .col-sm-4 > .btn').click()
         //upload image
+        cy.wait(5000)
         cy.get('#images').attachFile(scriptImagePath)
         cy.get('.toast-message').invoke("text").should("eq","Added 1 images to your gallery!")
         cy.get('.modal-active').click(-50, -50, { force: true });
@@ -85,7 +89,7 @@ describe('Code Injection Test', ()=>{
         //delete image
         cy.get('.delete-image > .fa').click()
         cy.get('.swal2-confirm').click()
-        cy.get('.toast-message').invoke("text").should("eq","Deleted image: " + scriptImagePath)
+        cy.get('.toast-message').should('contain',"Deleted image")
         
     })
     
