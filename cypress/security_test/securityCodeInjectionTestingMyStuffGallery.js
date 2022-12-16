@@ -3,7 +3,7 @@ import 'cypress-file-upload'
 
 describe('Code Injection Test', ()=>{
 
-    it.only('Security Code Injection Testing My Stuff Profile Page', () => 
+    it.skip('Security Code Injection Testing My Stuff Profile Page', () => 
     {
 
         const scriptImagePath = '<script>alert(\'test\')<:script>.png';
@@ -24,40 +24,7 @@ describe('Code Injection Test', ()=>{
         cy.logout()
     })
 
-    it.skip('profile Page Code Injection not allowed', () => 
-    {
-        const scriptImagePath = '<script>alert(\'test\')<:script>.png';
-        cy.visit('https://testing-06.vshred.com')
-        cy.login('mc_member@test.com','pass1234')
-        cy.get('.btn').click()
-        cy.get('.menu-vertical > :nth-child(4) > a').click()
-        cy.get('.btn__text').click()
-        cy.get('#images').attachFile(scriptImagePath)
-        cy.wait(5000)
-        
-        //cy.get('#images').a
-        //(scriptImagePath)
-        //cy.logout()
-    })
-
-    it.skip('profile Page Code Injection not allowed', () => 
-    {
-        const scriptImagePath = '<script>alert(\'test\')<:script>.png';
-        cy.visit_vshred_test_env()
-        cy.login('mc_member@test.com','pass1234')
-        //cy.login('maryann.c@vshred.com','VshredPass@2')
-        cy.get('.btn').click()
-        cy.get('.menu-vertical > :nth-child(4) > a').click()
-        cy.get('.btn__text').click()
-        cy.get('#images').attachFile(scriptImagePath)
-        cy.wait(5000)
-        
-        //cy.get('#images').a
-        //(scriptImagePath)
-        cy.logout()
-    })
-
-    it.only('My Stuff Gallery Image Upload Code Injection not allowed', () => 
+    it.skip('My Stuff Gallery Image Upload Code Injection not allowed', () => 
     {
         const scriptImagePath = '<script>alert(\'test\')<:script>.png';
         const dayjs = require('dayjs')
@@ -91,6 +58,48 @@ describe('Code Injection Test', ()=>{
         cy.get('.swal2-confirm').click()
         cy.get('.toast-message').should('contain',"Deleted image")
         
+    })
+
+    it.skip('Security Code Injection Testing My Stuff Profile Page', () => 
+    {
+
+        const scriptImagePath = '<script>alert(\'test\')<:script>.png';
+        const dayjs = require('dayjs')
+        const Timenow24hoursa = dayjs().format("Hmmss");
+        const CAUser = 'CA_SuperAdmin_'+dayjs().format('DDMMYYYY')+Timenow24hoursa;
+        cy.create_user_as_super_admin(CAUser)
+        cy.login(CAUser+'@catest.com','pass1234')
+        cy.wait(5000)
+        cy.get('.modal-active').click(-50, -50, { force: true });
+        // Update Password
+        cy.get(':nth-child(3) > .menu-vertical > :nth-child(2) > a').click()
+        cy.get('#current_password').type('pass1234')
+        cy.get('#password').type(scriptImagePath)
+        cy.get('#password_confirmation').type(scriptImagePath)
+        cy.get('.form-horizontal > .col-md-3 > .btn').click()
+        cy.get('.toast-message').should('contain',"Password updated") 
+        cy.get('.modal-active').click(-50, -50, { force: true });
+        //cy.get('.menu-vertical > :nth-child(5) > a').click()
+        //cy.logout()
+    })
+
+    it.only('Security Code Injection Testing My Stuff Profile Page', () => 
+    {
+
+        const scriptImagePath = '<script>alert(\'test\')<:script>.png';
+        const dayjs = require('dayjs')
+        const Timenow24hoursa = dayjs().format("Hmmss");
+        const CAUser = 'CA_SuperAdmin_'+dayjs().format('DDMMYYYY')+Timenow24hoursa;
+        cy.create_user_as_super_admin(CAUser)
+        cy.login(CAUser+'@catest.com','pass1234')
+        cy.wait(5000)
+        cy.get('.modal-active').click(-50, -50, { force: true });
+        // Update Password
+        cy.get('#questionnaire').click()
+        cy.get(':nth-child(2) > [data-v-e264feca=""] > .cdp-field > .cdp-input').type('Test')
+        cy.get(':nth-child(4) > [data-v-e264feca=""] > .cdp-field > .cdp-input').type('01')
+        //cy.get('.menu-vertical > :nth-child(5) > a').click()
+        //cy.logout()
     })
     
 })

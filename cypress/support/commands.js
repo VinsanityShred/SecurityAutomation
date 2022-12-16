@@ -66,4 +66,5 @@ Cypress.Commands.add('create_user_as_super_admin', (CAUser) =>
         cy.get('#createFormModal___BV_modal_footer_ > .btn-primary').click()
         cy.wait(5000)
         cy.get('.navbar > .nav > :nth-child(2) > .nav-link').click()
+        cy.wait(5000)
     })
