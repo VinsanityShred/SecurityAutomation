@@ -17,6 +17,10 @@
   },
   "homepage": "https://github.com/VinsanityShred/SecurityAutomation#readme",
   "devDependencies": {
-    "cypress": "^11.2.0"
+    "cypress": "^11.2.0",
+    "cypress-iframe": "^1.0.1"
+  },
+  "dependencies": {
+    "cypress-xpath": "^2.0.1"
   }
 }

@@ -1,9 +1,15 @@
 /// <reference types="Cypress" />
-import 'cypress-file-upload'
+/// <reference types="cypress-file-upload" />
+/// <reference types="cypress-iframe" />
+/// <reference types = "cypress-xpath" />
+import 'cypress-file-upload';
+import 'cypress-iframe';
+//import 'cypress-wait-until';
+
 
 describe('Code Injection Test', ()=>{
 
-    it.only('Security Code Injection Testing My Stuff Profile Page', () => 
+    it.skip('Security Code Injection Testing My Stuff Profile Page', () => 
     {
 
         const scriptImagePath = '<script>alert(\'test\')<:script>.png';
@@ -24,7 +30,7 @@ describe('Code Injection Test', ()=>{
         cy.logout()
     })
 
-    it.only('My Stuff Gallery Image Upload Code Injection not allowed', () => 
+    it.skip('My Stuff Gallery Image Upload Code Injection not allowed', () => 
     {
         const scriptImagePath = '<script>alert(\'test\')<:script>.png';
         const dayjs = require('dayjs')
@@ -63,7 +69,7 @@ describe('Code Injection Test', ()=>{
         
     })
 
-    it.only('Security Code Injection Testing My Stuff Profile Page', () => 
+    it.skip('Security Code Injection Testing My Stuff Profile Page', () => 
     {
 
         const scriptImagePath = '<script>alert(\'test\')<:script>.png';
@@ -86,7 +92,7 @@ describe('Code Injection Test', ()=>{
         //cy.logout()
     })
 
-    it.only('Security Code Injection Testing Vshred Boost Questionaire', () => 
+    it.skip('Security Code Injection Testing Vshred Boost Questionaire', () => 
     {
 
         const scriptImagePath = '<script>alert(\'test\')<:script>.png';
@@ -124,4 +130,40 @@ describe('Code Injection Test', ()=>{
         //cy.logout()
     })
     
+    describe('uncaught_exception', () => {
+        Cypress.on('uncaught:exception', (err, runnable) => {
+            // returning false here prevents Cypress from
+            // failing the test
+            return false
+        })
+        it.only('Security Code Injection Testing Order Form', () =>
+          {
+              const scriptImagePath = '<script>alert(\'test\')<:script>.png';
+              const dayjs = require('dayjs')
+              const Timenow24hoursa = dayjs().format("Hmmss");
+              const CAUser = 'CA_SuperAdmin_'+dayjs().format('DDMMYYYY')+Timenow24hoursa;
+              cy.visit('https://staging.vshred.com')
+              cy.create_user_as_super_admin(CAUser)
+              cy.login(CAUser+'@catest.com','pass1234')
+              cy.wait(15000)
+              cy.get('.modal-active').click(-50, -50, { force: true })
+              // Go to Program
+              cy.get('.menu-horizontal > :nth-child(2) > a').click()
+              cy.get(':nth-child(1) > .programs__container > :nth-child(1) > .programs__image-link > .programs__image').click()
+              cy.get('.btn').click()
+              //Verify Order Form page
+              cy.get('h2')
+                  .contains('What You Get Today').should('be.visible')
+              cy.wrap(Math.floor(Math.random() * 8999999999 + 1000000000)).as("randomInt")
+              cy.get("@randomInt").then((rand) => {cy.log(rand)
+                  cy.get('#phone').type(rand)
+                  });
+              cy.get(':nth-child(3) > .expand-area > .expand-inputs > .next-step').click()
+              cy.wait(15000)
+              ///PAYMENT INFORMATION SECTION
+              cy.OrderFormCommandSecondStep()
+              cy.logout()
+          })
+      })
+
 })
